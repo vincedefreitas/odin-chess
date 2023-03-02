@@ -172,5 +172,22 @@ describe Board do
     end
   end
 
+  describe '#update_piece' do
+    it 'updates piece on square' do
+      board.update_piece('c5', 'queen')
+      piece = board.piece_on_square('c5')
+      expect(piece).to eq('queen')
+    end
+  end
+
+  describe '#remove_piece' do
+    it 'removes a piece from a square' do
+      board.update_piece('h8', 'knight')
+      board.remove_piece('h8')
+      piece = board.piece_on_square('h8')
+      expect(piece).to be_nil
+    end
+  end
+
 
 end

@@ -87,6 +87,14 @@ class Board
     @squares[index][:colour]
   end
 
+  def update_piece(square, piece)
+    index = square_to_index(square)
+    @squares[index][:piece] = piece
+  end
 
+  def remove_piece(square)
+    index = square_to_index(square)
+    @squares[index][:piece] = nil
+  end
 
 end
