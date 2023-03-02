@@ -36,6 +36,14 @@ class Board
     "#{letter_col}#{row}"
   end
 
+  def square_to_arr(square)
+    [letter_to_column(square[0]), square[1].to_i]
+  end
+
+  def arr_to_square(arr)
+    "#{column_to_letter(arr[0])}#{arr[1]}"
+  end
+
   def colour_squares
     @squares.each_with_index do |square, index|
       index % 2 == 0 ? square[:colour] = 'white' : square[:colour] = 'black'

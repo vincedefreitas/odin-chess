@@ -189,5 +189,19 @@ describe Board do
     end
   end
 
+  describe '#square_to_arr' do
+    it 'converts a square to array format' do
+      result = board.square_to_arr('c5')
+      expect(result).to eq([3, 5])
+    end
+  end
+
+  describe '#arr_to_square' do
+    it 'converts an array to a square' do
+      result = board.arr_to_square([3, 5])
+      expect(result).to eq('c5')
+    end
+  end
+
 
 end
