@@ -105,4 +105,10 @@ class Board
     @squares[index][:piece] = nil
   end
 
+  def square_exists?(square)
+    col = letter_to_column(square[0])
+    row = square[1].to_i
+    col > 0 && col < 9 && row > 0 && row < 9
+  end
+
 end

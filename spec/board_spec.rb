@@ -203,5 +203,22 @@ describe Board do
     end
   end
 
+  describe '#square_exists?' do
+    context 'if square exists on the board' do
+      it 'returns true' do
+        result = board.square_exists?('h8')
+        expect(result).to be true
+      end
+    end
+  
+    context 'if square does not exist on board' do
+      it 'returns false' do
+        result = board.square_exists?('i1')
+        expect(result).to be false
+      end
+    end
+
+  end
+
 
 end
