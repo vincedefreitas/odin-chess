@@ -19,13 +19,82 @@ describe Piece do
     end
   end
 
-  describe '#possible_moves' do
-    it 'provides an array of all possible moves from current square' do
+  describe '#potential_moves' do
+    it 'provides an array of all potential moves from current square' do
       piece.move_list = [[1, 1], [2, 2]]
       piece.current_square = 'c5'
-      result = piece.possible_moves
+      result = piece.potential_moves
       expect(result).to eq(['d6', 'e7'])
     end
+  end
+
+  describe '#opposition_piece?' do
+    context 'if piece is opposition piece' do
+      it 'returns true' do
+        unidentified_piece = Piece.new
+        unidentified_piece.colour = 'white'
+        piece.colour = 'black'
+        result = piece.opposition_piece?(unidentified_piece)
+        expect(result).to be true
+      end
+    end
+
+    context 'if piece is not opposition piece' do
+      it 'returns false' do
+        unidentified_piece = Piece.new
+        unidentified_piece.colour = 'white'
+        piece.colour = 'white'
+        result = piece.opposition_piece?(unidentified_piece)
+        expect(result).to be false
+      end
+    end
+  end
+
+  describe '#valid_moves' do
+    context 'if no pieces in way' do
+      it 'returns an array of all possible moves within confines of board' do
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result = piece.valid_moves
+        expect(result).to eq(['e4', 'f4', 'g4', 'h4', 'c4', 'b4', 'a4', 'd5', 'd6', 'd7', 'd8', 'd3', 'd2', 'd1', 'e5', 'f6', 'g7', 'h8', 'c3', 'b2', 'a1', 'e3', 'f2', 'g1', 'c5', 'b6', 'a7'])
+      end
+    end
+
+    context 'if no pieces in way & piece is a rook' do
+      it 'returns an array of all possible moves within confines of board' do
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+        piece.current_square = 'd4'
+        result = piece.valid_moves
+        expect(result).to eq(['e4', 'f4', 'g4', 'h4', 'c4', 'b4', 'a4', 'd5', 'd6', 'd7', 'd8', 'd3', 'd2', 'd1'])
+      end
+    end
+
+    context 'if no pieces in way & piece is a bishop' do
+      it 'returns an array of all possible moves within confines of board' do
+        piece.move_list = [[1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result = piece.valid_moves
+        expect(result).to eq(['e5', 'f6', 'g7', 'h8', 'c3', 'b2', 'a1', 'e3', 'f2', 'g1', 'c5', 'b6', 'a7'])
+      end
+    end
+
+    context 'if pieces in way & piece is a queen' do
+      it 'returns an array of all possible moves within confines of board' do
+        piece.board.update_piece('g4', 'pawn')
+        piece.board.update_piece('a4', 'pawn')
+        piece.board.update_piece('d7', 'pawn')
+        piece.board.update_piece('d1', 'pawn')
+        piece.board.update_piece('g7', 'pawn')
+        piece.board.update_piece('a1', 'pawn')
+        piece.board.update_piece('g1', 'pawn')
+        piece.board.update_piece('a7', 'pawn')
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result = piece.valid_moves
+        expect(result).to eq(['e4', 'f4', 'c4', 'b4', 'd5', 'd6', 'd3', 'd2', 'e5', 'f6', 'c3', 'b2', 'e3', 'f2', 'c5', 'b6'])
+      end
+    end
+
   end
 
 end

@@ -1,7 +1,8 @@
 require_relative '../board.rb'
+require 'pry-byebug'
 
 class Piece
-  attr_accessor :current_square, :symbol, :colour, :current_square_colour, :start_square, :move_list, :past_moves
+  attr_accessor :current_square, :symbol, :colour, :current_square_colour, :start_square, :move_list, :past_moves, :board
 
   def initialize
     @board = Board.new
@@ -25,13 +26,31 @@ class Piece
     @current_square_colour = colour
   end
 
-  def possible_moves
+  def potential_moves
     current = @board.square_to_arr(@current_square)
-    possible_moves_arr = []
+    potential_moves_arr = []
     @move_list.each do |move|
-      possible_moves_arr << @board.arr_to_square([move[0] + current[0], move[1] + current[1]])
+      potential_moves_arr << @board.arr_to_square([move[0] + current[0], move[1] + current[1]])
     end
-    possible_moves_arr
+    potential_moves_arr
+  end
+
+  def opposition_piece?(piece)
+    piece.colour != @colour
+  end
+
+  def valid_moves
+    moves = []
+    @move_list.each do |move|
+      current = @board.square_to_arr(@current_square)
+      next_square = [move[0] + current[0], move[1] + current[1]]
+      while @board.square_exists?(@board.arr_to_square(next_square))
+        break if !@board.square_empty?(@board.arr_to_square(next_square))
+        moves << @board.arr_to_square(next_square)
+        next_square = [move[0] + next_square[0], move[1] + next_square[1]]
+      end
+    end
+    moves
   end
 
 
