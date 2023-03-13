@@ -1,7 +1,7 @@
 require './lib/pieces/piece.rb'
 
 describe Piece do
-  subject(:piece) { Piece.new }
+  subject(:piece) { Piece.new('white') }
 
   describe '#update_current_square' do
     it 'updates the @current_square variable' do
@@ -31,8 +31,7 @@ describe Piece do
   describe '#opposition_piece?' do
     context 'if piece is opposition piece' do
       it 'returns true' do
-        unidentified_piece = Piece.new
-        unidentified_piece.colour = 'white'
+        unidentified_piece = Piece.new('white')
         piece.colour = 'black'
         result = piece.opposition_piece?(unidentified_piece)
         expect(result).to be true
@@ -41,8 +40,7 @@ describe Piece do
 
     context 'if piece is not opposition piece' do
       it 'returns false' do
-        unidentified_piece = Piece.new
-        unidentified_piece.colour = 'white'
+        unidentified_piece = Piece.new('white')
         piece.colour = 'white'
         result = piece.opposition_piece?(unidentified_piece)
         expect(result).to be false
@@ -95,6 +93,77 @@ describe Piece do
       end
     end
 
+  end
+
+  describe '#capturable' do
+    it 'returns an array of squares containing pieces that can be captured' do
+      black_pawn = Piece.new('black')
+      white_pawn = Piece.new('white')
+      piece.board.update_piece('g4', black_pawn)
+      piece.board.update_piece('d7', black_pawn)
+      piece.board.update_piece('a1', black_pawn)
+      piece.board.update_piece('a7', white_pawn )
+      piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+      piece.current_square = 'd4'
+      result = piece.capturable
+      expect(result).to eq(['g4', 'd7', 'a1'])
+    end
+  end
+
+  describe '#valid_move?' do
+    context 'if move is valid' do
+      it 'returns true' do
+        black_pawn = Piece.new('black')
+        piece.board.update_piece('d7', black_pawn)
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result_one = piece.valid_move?('b4')
+        result_two = piece.valid_move?('d7')
+        result_three = piece.valid_move?('e5')
+        expect(result_one).to be true
+        expect(result_two).to be true
+        expect(result_three).to be true
+      end
+    end
+
+    context 'if move is not valid' do
+      it 'returns false' do
+        black_pawn = Piece.new('black')
+        piece.board.update_piece('d7', black_pawn)
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result_one = piece.valid_move?('d8')
+        result_two = piece.valid_move?('d4')
+        result_three = piece.valid_move?('e9')
+        result_four = piece.valid_move?('a2')
+        expect(result_one).to be false
+        expect(result_two).to be false
+        expect(result_three).to be false
+        expect(result_four).to be false
+      end
+    end
+  end
+
+  describe 'can_take?' do
+    context 'if square contains piece that you can take' do
+      it 'returns true' do
+        black_pawn = Piece.new('black')
+        piece.board.update_piece('c4', black_pawn)
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result = piece.can_take?('c4')
+        expect(result).to be true
+      end
+    end
+
+    context 'if square does not contain piece that you can take' do
+      it 'returns false' do
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result = piece.can_take?('c4')
+        expect(result).to be false
+      end
+    end
   end
 
 end

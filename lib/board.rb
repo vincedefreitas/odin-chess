@@ -46,7 +46,11 @@ class Board
 
   def colour_squares
     @squares.each_with_index do |square, index|
-      index % 2 == 0 ? square[:colour] = 'white' : square[:colour] = 'black'
+      if index_to_row(index).even?
+        index % 2 == 0 ? square[:colour] = 'white' : square[:colour] = 'black'
+      else
+        index % 2 == 0 ? square[:colour] = 'black' : square[:colour] = 'white'
+      end
     end
   end
 
@@ -111,4 +115,27 @@ class Board
     col > 0 && col < 9 && row > 0 && row < 9
   end
 
+  def display_board
+    set_up_squares
+    row = 8
+    @squares.each_with_index do |square, index|
+      if square[:colour] == 'white' && square[:row] == row && square[:column] == 'h'
+        print "\e[47m   \e[0m"
+        puts
+        row -= 1
+      elsif square[:colour] == 'black' && square[:row] == row && square[:column] == 'h'
+        print "\e[100m   \e[0m"
+        puts
+        row -= 1
+      elsif square[:colour] == 'white' && square[:row] == row
+        print "\e[47m   \e[0m"
+      elsif square[:colour] == 'black' && square[:row] == row 
+        print "\e[100m   \e[0m"
+      end
+    end
+  end
+
 end
+
+board = Board.new
+board.display_board
