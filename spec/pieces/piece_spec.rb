@@ -19,15 +19,6 @@ describe Piece do
     end
   end
 
-  describe '#potential_moves' do
-    it 'provides an array of all potential moves from current square' do
-      piece.move_list = [[1, 1], [2, 2]]
-      piece.current_square = 'c5'
-      result = piece.potential_moves
-      expect(result).to eq(['d6', 'e7'])
-    end
-  end
-
   describe '#opposition_piece?' do
     context 'if piece is opposition piece' do
       it 'returns true' do

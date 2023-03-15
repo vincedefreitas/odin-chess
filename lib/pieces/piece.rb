@@ -26,15 +26,6 @@ class Piece
     @current_square_colour = colour
   end
 
-  def potential_moves
-    current = @board.square_to_arr(@current_square)
-    potential_moves_arr = []
-    @move_list.each do |move|
-      potential_moves_arr << @board.arr_to_square([move[0] + current[0], move[1] + current[1]])
-    end
-    potential_moves_arr
-  end
-
   def opposition_piece?(piece)
     piece.colour != @colour
   end
