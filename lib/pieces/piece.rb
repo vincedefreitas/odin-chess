@@ -2,7 +2,7 @@ require_relative '../board.rb'
 require 'pry-byebug'
 
 class Piece
-  attr_accessor :current_square, :symbol, :colour, :current_square_colour, :start_square, :move_list, :past_moves, :board
+  attr_accessor :current_square, :symbol, :colour, :current_square_colour, :start_square, :move_list, :past_moves, :board, :moved
 
   def initialize(colour)
     @board = Board.new
