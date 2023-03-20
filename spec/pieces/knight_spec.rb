@@ -43,11 +43,13 @@ describe Knight do
 
   describe '#capturable' do
     it 'returns an array of squares containing pieces that can be captured' do
-      black_pawn = Piece.new('black')
+      black_pawn_one = Piece.new('black')
+      black_pawn_two = Piece.new('black')
+      black_pawn_three = Piece.new('black')
       white_pawn = Piece.new('white')
-      knight.board.update_piece('f5', black_pawn)
-      knight.board.update_piece('b3', black_pawn)
-      knight.board.update_piece('e2', black_pawn)
+      knight.board.update_piece('f5', black_pawn_one)
+      knight.board.update_piece('b3', black_pawn_two)
+      knight.board.update_piece('e2', black_pawn_three)
       knight.board.update_piece('c6', white_pawn )
       knight.current_square = 'd4'
       result = knight.capturable

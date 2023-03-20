@@ -157,4 +157,30 @@ describe Piece do
     end
   end
 
+  describe '#check?' do
+    context 'if king is in check' do
+      it 'returns true' do
+        black_king = Piece.new('black')
+        piece.board.update_piece('h8', black_king)
+        black_king.current_square = 'h8'
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result = piece.check?(black_king)
+        expect(result).to be true
+      end
+    end
+
+    context 'if king is not in check' do
+      it 'returns false' do
+        black_king = Piece.new('black')
+        piece.board.update_piece('g8', black_king)
+        black_king.current_square = 'g8'
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'd4'
+        result = piece.check?(black_king)
+        expect(result).to be false
+      end
+    end
+  end
+
 end

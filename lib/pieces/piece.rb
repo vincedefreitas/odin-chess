@@ -65,4 +65,8 @@ class Piece
     capturable.include?(square)
   end
 
+  def check?(king)
+    capturable.include?(king.current_square)
+  end
+
 end
