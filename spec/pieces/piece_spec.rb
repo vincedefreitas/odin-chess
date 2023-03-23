@@ -1,4 +1,5 @@
 require './lib/pieces/piece.rb'
+require './lib/pieces/king.rb'
 
 describe Piece do
   subject(:piece) { Piece.new('white') }
@@ -183,4 +184,31 @@ describe Piece do
     end
   end
 
+  describe '#checkmate?' do
+    context 'if king is mated' do
+      it 'returns true' do
+        black_king = King.new('black', 'hello')
+        piece.board.update_piece('a8', black_king)
+        black_king.board.update_piece('b7', piece)
+        black_king.current_square = 'a8'
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'b7'
+        result = piece.checkmate?(black_king)
+        expect(result).to be true
+      end
+    end
+
+    context 'if king is not mated' do
+      it 'returns false' do
+        black_king = King.new('black', 'black')
+        piece.board.update_piece('a8', black_king)
+        black_king.board.update_piece('a6', piece)
+        black_king.current_square = 'a8'
+        piece.move_list = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        piece.current_square = 'a6'
+        result = piece.checkmate?(black_king)
+        expect(result).to be false
+      end
+    end
+  end
 end

@@ -69,4 +69,8 @@ class Piece
     capturable.include?(king.current_square)
   end
 
+  def checkmate?(king)
+    king.valid_moves.all? { |move| valid_move?(move) }
+  end
+
 end
