@@ -5,7 +5,6 @@ class Piece
   attr_accessor :current_square, :symbol, :colour, :current_square_colour, :start_square, :move_list, :past_moves, :board, :moved
 
   def initialize(colour)
-    @board = Board.new
     @symbol = nil
     @colour = colour
     @current_square = nil

@@ -104,7 +104,7 @@ describe Board do
       reference = board.squares[63][:reference]
       column = board.squares[63][:column]
       row = board.squares[63][:row]
-      expect(colour).to eq('black')
+      expect(colour).to eq('white')
       expect(reference).to eq('h1')
       expect(column).to eq('h')
       expect(row).to eq(1)
@@ -167,8 +167,8 @@ describe Board do
       board.set_up_squares
       result = board.colour_of_square('c3')
       result_two = board.colour_of_square('h1')
-      expect(result).to eq('white')
-      expect(result_two).to eq('black')
+      expect(result).to eq('black')
+      expect(result_two).to eq('white')
     end
   end
 
@@ -218,6 +218,18 @@ describe Board do
       end
     end
 
+  end
+
+  describe '#set_up_pawns' do
+    context 'if colour = white' do
+      it 'sets up white pawns' do
+        board.set_up_squares
+        board.set_up_pawns('white', 2, "\u2659")
+        arr = []
+        board.squares.each { |square| arr << square[:piece] if square[:row] == 2 }
+        expect(arr.all? { |element| element.instance_of?(Pawn) } ).to be true
+      end
+    end
   end
 
 
