@@ -1,8 +1,7 @@
-require_relative '../board.rb'
 require 'pry-byebug'
 
 class Piece
-  attr_accessor :current_square, :symbol, :colour, :current_square_colour, :start_square, :move_list, :past_moves, :board, :moved
+  attr_accessor :current_square, :symbol, :colour, :current_square_colour, :start_square, :move_list, :past_moves, :moved
 
   def initialize(colour)
     @symbol = nil
@@ -29,47 +28,52 @@ class Piece
     piece.colour != @colour
   end
 
-  def valid_moves
+  def valid_moves(board)
     moves = []
     @move_list.each do |move|
-      current = @board.square_to_arr(@current_square)
+      current = board.square_to_arr(@current_square)
       next_square = [move[0] + current[0], move[1] + current[1]]
-      while @board.square_exists?(@board.arr_to_square(next_square))
-        break if !@board.square_empty?(@board.arr_to_square(next_square))
-        moves << @board.arr_to_square(next_square)
+      while board.square_exists?(board.arr_to_square(next_square))
+        break if !board.square_empty?(board.arr_to_square(next_square))
+        moves << board.arr_to_square(next_square)
         next_square = [move[0] + next_square[0], move[1] + next_square[1]]
       end
     end
     moves
   end
 
-  def capturable
+  def capturable(board)
     capturable_squares = []
     @move_list.each do |move|
-      current = @board.square_to_arr(@current_square)
+      current = board.square_to_arr(@current_square)
       next_square = [move[0] + current[0], move[1] + current[1]]
-      while @board.square_exists?(@board.arr_to_square(next_square))
-        capturable_squares << @board.arr_to_square(next_square) if !@board.square_empty?(@board.arr_to_square(next_square)) && opposition_piece?(@board.squares[@board.square_to_index(@board.arr_to_square(next_square))][:piece])
+      while board.square_exists?(board.arr_to_square(next_square))
+        break if !board.square_empty?(board.arr_to_square(next_square)) && board.piece_on_square(board.arr_to_square(next_square)).colour == @colour
+        capturable_squares << board.arr_to_square(next_square) if !board.square_empty?(board.arr_to_square(next_square)) && opposition_piece?(board.squares[board.square_to_index(board.arr_to_square(next_square))][:piece])
         next_square = [move[0] + next_square[0], move[1] + next_square[1]]
       end
     end
     capturable_squares
   end
 
-  def valid_move?(square)
-    valid_moves.include?(square) || capturable.include?(square)
+  def valid_move?(square, board)
+    valid_moves(board).include?(square) || capturable(board).include?(square)
   end
 
-  def can_take?(square)
-    capturable.include?(square)
+  def can_take?(square, board)
+    capturable(board).include?(square)
   end
 
-  def check?(king)
-    capturable.include?(king.current_square)
+  def check?(board)
+    arr = capturable(board)
+    arr.each do |square|
+      return true if board.piece_on_square(square).instance_of?(King)
+    end
+    false
   end
 
-  def checkmate?(king)
-    king.valid_moves.all? { |move| valid_move?(move) }
+  def checkmate?(king, board)
+    king.valid_moves(board).all? { |move| valid_move?(move) }
   end
 
 end

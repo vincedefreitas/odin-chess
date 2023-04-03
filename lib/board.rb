@@ -1,5 +1,9 @@
-require_relative 'pieces/pawn.rb'
-require_relative 'board'
+require_relative 'pieces/pawn'
+require_relative 'pieces/rook'
+require_relative 'pieces/knight'
+require_relative 'pieces/bishop'
+require_relative 'pieces/queen'
+require_relative 'pieces/king'
 
 class Board
   attr_accessor :squares
@@ -112,7 +116,7 @@ class Board
 
   def square_exists?(square)
     col = letter_to_column(square[0])
-    row = square[1].to_i
+    row = square[1..].to_i
     col > 0 && col < 9 && row > 0 && row < 9
   end
 
@@ -141,13 +145,31 @@ class Board
 
   def set_up_pawns(colour, row, symbol)
     @squares.each do |square|
-      square[:piece] = Pawn.new(colour, symbol) if square[:row] == 2
+      square[:piece] = Pawn.new(colour, symbol, square[:reference]) if square[:row] == row
     end
+  end
+
+  def set_up_pieces(colour)
+    colour == 'white' ? @squares[square_to_index('a1')][:piece] = Rook.new('white', "\u2656", 'a1') : @squares[square_to_index('a8')][:piece] = Rook.new('black', "\u265C", 'a8') 
+    colour == 'white' ? @squares[square_to_index('b1')][:piece] = Knight.new('white', "\u2658", 'b1') : @squares[square_to_index('b8')][:piece] = Knight.new('black', "\u265E", 'b8')
+    colour == 'white' ? @squares[square_to_index('c1')][:piece] = Bishop.new('white', "\u2657", 'c1') : @squares[square_to_index('c8')][:piece] = Bishop.new('black', "\u265D", 'c8')
+    colour == 'white' ? @squares[square_to_index('d1')][:piece] = Queen.new('white', "\u2655", 'd1') : @squares[square_to_index('d8')][:piece] = Queen.new('black', "\u265B", 'd8')
+    colour == 'white' ? @squares[square_to_index('e1')][:piece] = King.new('white', "\u2654", 'e1') : @squares[square_to_index('e8')][:piece] = King.new('black', "\u265A", 'e8')
+    colour == 'white' ? @squares[square_to_index('f1')][:piece] = Bishop.new('white', "\u2657", 'f1') : @squares[square_to_index('f8')][:piece] = Bishop.new('black', "\u265D", 'f8')
+    colour == 'white' ? @squares[square_to_index('g1')][:piece] = Knight.new('white', "\u2658", 'g1') : @squares[square_to_index('g8')][:piece] = Knight.new('black', "\u265E", 'g8') 
+    colour == 'white' ? @squares[square_to_index('h1')][:piece] = Rook.new('white', "\u2656", 'h1') : @squares[square_to_index('h8')][:piece] = Rook.new('black', "\u265C", 'h8')       
+  end
+
+  def set_up_board
+    set_up_squares
+    set_up_pieces('white')
+    set_up_pieces('black')
+    set_up_pawns('white', 2, "\u2659")
+    set_up_pawns('black', 7, "\u265F")
   end
 
 end
 
-board = Board.new
-board.set_up_squares
-board.set_up_pawns('white', 2, "\u2659")
-board.display_board
+# board = Board.new
+# board.set_up_board
+# board.display_board

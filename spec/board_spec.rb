@@ -230,7 +230,117 @@ describe Board do
         expect(arr.all? { |element| element.instance_of?(Pawn) } ).to be true
       end
     end
+
+    context 'if colour = black' do
+      it 'sets up black pawns' do
+        board.set_up_squares
+        board.set_up_pawns('black', 7, "\u265F")
+        arr = []
+        board.squares.each { |square| arr << square[:piece] if square[:row] == 7 }
+        expect(arr.all? { |element| element.instance_of?(Pawn) } ).to be true
+      end
+    end
   end
+
+  describe '#set_up_pieces' do
+    before do
+      board.set_up_squares
+    end
+
+    context 'if colour = white' do
+      before do
+        board.set_up_pieces('white')
+      end
+
+      it 'sets up 1st rank "a" Rook' do
+        result = board.squares[board.square_to_index('a1')][:piece]
+        expect(result.instance_of?(Rook)).to be true
+      end
+
+      it 'sets up 1st rank "b" Knight' do
+        result = board.squares[board.square_to_index('b1')][:piece]
+        expect(result.instance_of?(Knight)).to be true
+      end
+
+      it 'sets up 1st rank "c" Bishop' do
+        result = board.squares[board.square_to_index('c1')][:piece]
+        expect(result.instance_of?(Bishop)).to be true
+      end
+
+      it 'sets up 1st rank "d" Queen' do
+        result = board.squares[board.square_to_index('d1')][:piece]
+        expect(result.instance_of?(Queen)).to be true
+      end
+
+      it 'sets up 1st rank "e" King' do
+        result = board.squares[board.square_to_index('e1')][:piece]
+        expect(result.instance_of?(King)).to be true
+      end
+
+      it 'sets up 1st rank "f" Bishop' do
+        result = board.squares[board.square_to_index('f1')][:piece]
+        expect(result.instance_of?(Bishop)).to be true
+      end
+
+      it 'sets up 1st rank "g" Knight' do
+        result = board.squares[board.square_to_index('g1')][:piece]
+        expect(result.instance_of?(Knight)).to be true
+      end
+
+      it 'sets up 1st rank "h" Rook' do
+        result = board.squares[board.square_to_index('h1')][:piece]
+        expect(result.instance_of?(Rook)).to be true
+      end
+    end
+
+    context 'if colour = black' do
+      before do
+        board.set_up_pieces('black')
+      end
+
+      it 'sets up 8th rank "a" Rook' do
+        result = board.squares[board.square_to_index('a8')][:piece]
+        expect(result.instance_of?(Rook)).to be true
+      end
+
+      it 'sets up 8th rank "b" Knight' do
+        result = board.squares[board.square_to_index('b8')][:piece]
+        expect(result.instance_of?(Knight)).to be true
+      end
+
+      it 'sets up 8th rank "c" Bishop' do
+        result = board.squares[board.square_to_index('c8')][:piece]
+        expect(result.instance_of?(Bishop)).to be true
+      end
+
+      it 'sets up 8th rank "d" Queen' do
+        result = board.squares[board.square_to_index('d8')][:piece]
+        expect(result.instance_of?(Queen)).to be true
+      end
+
+      it 'sets up 8th rank "e" King' do
+        result = board.squares[board.square_to_index('e8')][:piece]
+        expect(result.instance_of?(King)).to be true
+      end
+
+      it 'sets up 8th rank "f" Bishop' do
+        result = board.squares[board.square_to_index('f8')][:piece]
+        expect(result.instance_of?(Bishop)).to be true
+      end
+
+      it 'sets up 8th rank "g" Knight' do
+        result = board.squares[board.square_to_index('g8')][:piece]
+        expect(result.instance_of?(Knight)).to be true
+      end
+
+      it 'sets up 8th rank "h" Rook' do
+        result = board.squares[board.square_to_index('h8')][:piece]
+        expect(result.instance_of?(Rook)).to be true
+      end
+    end
+
+  end
+
 
 
 end
